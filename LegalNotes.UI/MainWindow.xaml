@@ -7,6 +7,22 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
+        <StackPanel Orientation="Horizontal" Height="30" HorizontalAlignment="Left">
+            <ComboBox x:Name="cmbNotarialActions"
+                      ItemsSource="{Binding}"
+                      IsEditable="True" 
+                      Text="{Binding Name}"
+                      SelectionChanged="cmbNotarialActions_SelectionChanged"/>
+            <ComboBox x:Name="cmbNotarialTypes"
+                      ItemsSource="{Binding}"
+                      IsEditable="True" 
+                      Text="{Binding Name}"
+                      SelectionChanged="cmbNotarialTypes_SelectionChanged"/>
+            <ComboBox x:Name="cmbNotarialObjects"
+                      ItemsSource="{Binding}"
+                      IsEditable="True"
+                      Text="{Binding Name}"/>
+        </StackPanel>
         
     </Grid>
 </Window>

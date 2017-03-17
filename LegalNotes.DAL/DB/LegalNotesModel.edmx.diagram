@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="34dcb0fffd33413eb2883595d85b3b4b" Name="Diagram1">
+        <EntityTypeShape EntityType="LegalNotesModel.Client" Width="1.5" PointX="5.25" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="LegalNotesModel.Document" Width="1.5" PointX="7.5" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="LegalNotesModel.NotarialAction" Width="1.5" PointX="0.75" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="LegalNotesModel.NotarialActionsObject" Width="1.5" PointX="5.25" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="LegalNotesModel.NotarialActionsType" Width="1.5" PointX="3" PointY="7.25" IsExpanded="true" />
+        <AssociationConnector Association="LegalNotesModel.FK_Documents_Clients_ClientId" ManuallyRouted="false" />
+        <AssociationConnector Association="LegalNotesModel.FK_Documents_NotarialActions_NotarialActionId" ManuallyRouted="false" />
+        <AssociationConnector Association="LegalNotesModel.FK_Documents_NotarialActionsObjects_NotarialActionObjectId" ManuallyRouted="false" />
+        <AssociationConnector Association="LegalNotesModel.FK_Documents_NotarialActionsTypes_NotarialActionTypeId" ManuallyRouted="false" />
+        <AssociationConnector Association="LegalNotesModel.FK_NotarialActionsTypes_NotarialActions_NotarialActionId" ManuallyRouted="false" />
+        <AssociationConnector Association="LegalNotesModel.FK_NotarialActionsObjects_NotarialActionsTypes_NotarialActionTypeId" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

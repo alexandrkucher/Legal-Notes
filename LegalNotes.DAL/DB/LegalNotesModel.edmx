@@ -1,0 +1,412 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="LegalNotesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Clients">
+          <Key>
+            <PropertyRef Name="ClientId" />
+          </Key>
+          <Property Name="ClientId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="MiddleName" Type="nvarchar" MaxLength="255" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="PassportNumber" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="PassportData" Type="nvarchar" MaxLength="1024" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Documents">
+          <Key>
+            <PropertyRef Name="DocumentId" />
+          </Key>
+          <Property Name="DocumentId" Type="int" Nullable="false" />
+          <Property Name="NotarialActionId" Type="int" />
+          <Property Name="NotarialActionTypeId" Type="int" />
+          <Property Name="NotarialActionObjectId" Type="int" />
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="Price" Type="money" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="NotarialActions">
+          <Key>
+            <PropertyRef Name="NotarialActionId" />
+          </Key>
+          <Property Name="NotarialActionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NotarialActionsObjects">
+          <Key>
+            <PropertyRef Name="NotarialActionObjectId" />
+          </Key>
+          <Property Name="NotarialActionObjectId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NotarialActionTypeId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NotarialActionsTypes">
+          <Key>
+            <PropertyRef Name="NotarialActionTypeId" />
+          </Key>
+          <Property Name="NotarialActionTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NotarialActionId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Documents_Clients_ClientId">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="1" />
+          <End Role="Documents" Type="Self.Documents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="ClientId" />
+            </Principal>
+            <Dependent Role="Documents">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Documents_NotarialActions_NotarialActionId">
+          <End Role="NotarialActions" Type="Self.NotarialActions" Multiplicity="0..1" />
+          <End Role="Documents" Type="Self.Documents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NotarialActions">
+              <PropertyRef Name="NotarialActionId" />
+            </Principal>
+            <Dependent Role="Documents">
+              <PropertyRef Name="NotarialActionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Documents_NotarialActionsObjects_NotarialActionObjectId">
+          <End Role="NotarialActionsObjects" Type="Self.NotarialActionsObjects" Multiplicity="0..1" />
+          <End Role="Documents" Type="Self.Documents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NotarialActionsObjects">
+              <PropertyRef Name="NotarialActionObjectId" />
+            </Principal>
+            <Dependent Role="Documents">
+              <PropertyRef Name="NotarialActionObjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Documents_NotarialActionsTypes_NotarialActionTypeId">
+          <End Role="NotarialActionsTypes" Type="Self.NotarialActionsTypes" Multiplicity="0..1" />
+          <End Role="Documents" Type="Self.Documents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NotarialActionsTypes">
+              <PropertyRef Name="NotarialActionTypeId" />
+            </Principal>
+            <Dependent Role="Documents">
+              <PropertyRef Name="NotarialActionTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NotarialActionsObjects_NotarialActionsTypes_NotarialActionTypeId">
+          <End Role="NotarialActionsTypes" Type="Self.NotarialActionsTypes" Multiplicity="1" />
+          <End Role="NotarialActionsObjects" Type="Self.NotarialActionsObjects" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NotarialActionsTypes">
+              <PropertyRef Name="NotarialActionTypeId" />
+            </Principal>
+            <Dependent Role="NotarialActionsObjects">
+              <PropertyRef Name="NotarialActionTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NotarialActionsTypes_NotarialActions_NotarialActionId">
+          <End Role="NotarialActions" Type="Self.NotarialActions" Multiplicity="1" />
+          <End Role="NotarialActionsTypes" Type="Self.NotarialActionsTypes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NotarialActions">
+              <PropertyRef Name="NotarialActionId" />
+            </Principal>
+            <Dependent Role="NotarialActionsTypes">
+              <PropertyRef Name="NotarialActionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LegalNotesModelStoreContainer">
+          <EntitySet Name="Clients" EntityType="Self.Clients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Documents" EntityType="Self.Documents" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NotarialActions" EntityType="Self.NotarialActions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NotarialActionsObjects" EntityType="Self.NotarialActionsObjects" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NotarialActionsTypes" EntityType="Self.NotarialActionsTypes" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Documents_Clients_ClientId" Association="Self.FK_Documents_Clients_ClientId">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="Documents" EntitySet="Documents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Documents_NotarialActions_NotarialActionId" Association="Self.FK_Documents_NotarialActions_NotarialActionId">
+            <End Role="NotarialActions" EntitySet="NotarialActions" />
+            <End Role="Documents" EntitySet="Documents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Documents_NotarialActionsObjects_NotarialActionObjectId" Association="Self.FK_Documents_NotarialActionsObjects_NotarialActionObjectId">
+            <End Role="NotarialActionsObjects" EntitySet="NotarialActionsObjects" />
+            <End Role="Documents" EntitySet="Documents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Documents_NotarialActionsTypes_NotarialActionTypeId" Association="Self.FK_Documents_NotarialActionsTypes_NotarialActionTypeId">
+            <End Role="NotarialActionsTypes" EntitySet="NotarialActionsTypes" />
+            <End Role="Documents" EntitySet="Documents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NotarialActionsObjects_NotarialActionsTypes_NotarialActionTypeId" Association="Self.FK_NotarialActionsObjects_NotarialActionsTypes_NotarialActionTypeId">
+            <End Role="NotarialActionsTypes" EntitySet="NotarialActionsTypes" />
+            <End Role="NotarialActionsObjects" EntitySet="NotarialActionsObjects" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NotarialActionsTypes_NotarialActions_NotarialActionId" Association="Self.FK_NotarialActionsTypes_NotarialActions_NotarialActionId">
+            <End Role="NotarialActions" EntitySet="NotarialActions" />
+            <End Role="NotarialActionsTypes" EntitySet="NotarialActionsTypes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LegalNotesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ClientId" />
+          </Key>
+          <Property Name="ClientId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MiddleName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PassportNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PassportData" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Documents" Relationship="Self.FK_Documents_Clients_ClientId" FromRole="Clients" ToRole="Documents" />
+        </EntityType>
+        <EntityType Name="Document">
+          <Key>
+            <PropertyRef Name="DocumentId" />
+          </Key>
+          <Property Name="DocumentId" Type="Int32" Nullable="false" />
+          <Property Name="NotarialActionId" Type="Int32" />
+          <Property Name="NotarialActionTypeId" Type="Int32" />
+          <Property Name="NotarialActionObjectId" Type="Int32" />
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_Documents_Clients_ClientId" FromRole="Documents" ToRole="Clients" />
+          <NavigationProperty Name="NotarialAction" Relationship="Self.FK_Documents_NotarialActions_NotarialActionId" FromRole="Documents" ToRole="NotarialActions" />
+          <NavigationProperty Name="NotarialActionsObject" Relationship="Self.FK_Documents_NotarialActionsObjects_NotarialActionObjectId" FromRole="Documents" ToRole="NotarialActionsObjects" />
+          <NavigationProperty Name="NotarialActionsType" Relationship="Self.FK_Documents_NotarialActionsTypes_NotarialActionTypeId" FromRole="Documents" ToRole="NotarialActionsTypes" />
+        </EntityType>
+        <EntityType Name="NotarialAction">
+          <Key>
+            <PropertyRef Name="NotarialActionId" />
+          </Key>
+          <Property Name="NotarialActionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Documents" Relationship="Self.FK_Documents_NotarialActions_NotarialActionId" FromRole="NotarialActions" ToRole="Documents" />
+          <NavigationProperty Name="NotarialActionsTypes" Relationship="Self.FK_NotarialActionsTypes_NotarialActions_NotarialActionId" FromRole="NotarialActions" ToRole="NotarialActionsTypes" />
+        </EntityType>
+        <EntityType Name="NotarialActionsObject">
+          <Key>
+            <PropertyRef Name="NotarialActionObjectId" />
+          </Key>
+          <Property Name="NotarialActionObjectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NotarialActionTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Documents" Relationship="Self.FK_Documents_NotarialActionsObjects_NotarialActionObjectId" FromRole="NotarialActionsObjects" ToRole="Documents" />
+          <NavigationProperty Name="NotarialActionsType" Relationship="Self.FK_NotarialActionsObjects_NotarialActionsTypes_NotarialActionTypeId" FromRole="NotarialActionsObjects" ToRole="NotarialActionsTypes" />
+        </EntityType>
+        <EntityType Name="NotarialActionsType">
+          <Key>
+            <PropertyRef Name="NotarialActionTypeId" />
+          </Key>
+          <Property Name="NotarialActionTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NotarialActionId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Documents" Relationship="Self.FK_Documents_NotarialActionsTypes_NotarialActionTypeId" FromRole="NotarialActionsTypes" ToRole="Documents" />
+          <NavigationProperty Name="NotarialAction" Relationship="Self.FK_NotarialActionsTypes_NotarialActions_NotarialActionId" FromRole="NotarialActionsTypes" ToRole="NotarialActions" />
+          <NavigationProperty Name="NotarialActionsObjects" Relationship="Self.FK_NotarialActionsObjects_NotarialActionsTypes_NotarialActionTypeId" FromRole="NotarialActionsTypes" ToRole="NotarialActionsObjects" />
+        </EntityType>
+        <Association Name="FK_Documents_Clients_ClientId">
+          <End Role="Clients" Type="Self.Client" Multiplicity="1" />
+          <End Role="Documents" Type="Self.Document" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="ClientId" />
+            </Principal>
+            <Dependent Role="Documents">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Documents_NotarialActions_NotarialActionId">
+          <End Role="NotarialActions" Type="Self.NotarialAction" Multiplicity="0..1" />
+          <End Role="Documents" Type="Self.Document" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NotarialActions">
+              <PropertyRef Name="NotarialActionId" />
+            </Principal>
+            <Dependent Role="Documents">
+              <PropertyRef Name="NotarialActionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Documents_NotarialActionsObjects_NotarialActionObjectId">
+          <End Role="NotarialActionsObjects" Type="Self.NotarialActionsObject" Multiplicity="0..1" />
+          <End Role="Documents" Type="Self.Document" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NotarialActionsObjects">
+              <PropertyRef Name="NotarialActionObjectId" />
+            </Principal>
+            <Dependent Role="Documents">
+              <PropertyRef Name="NotarialActionObjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Documents_NotarialActionsTypes_NotarialActionTypeId">
+          <End Role="NotarialActionsTypes" Type="Self.NotarialActionsType" Multiplicity="0..1" />
+          <End Role="Documents" Type="Self.Document" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NotarialActionsTypes">
+              <PropertyRef Name="NotarialActionTypeId" />
+            </Principal>
+            <Dependent Role="Documents">
+              <PropertyRef Name="NotarialActionTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NotarialActionsTypes_NotarialActions_NotarialActionId">
+          <End Role="NotarialActions" Type="Self.NotarialAction" Multiplicity="1" />
+          <End Role="NotarialActionsTypes" Type="Self.NotarialActionsType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NotarialActions">
+              <PropertyRef Name="NotarialActionId" />
+            </Principal>
+            <Dependent Role="NotarialActionsTypes">
+              <PropertyRef Name="NotarialActionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NotarialActionsObjects_NotarialActionsTypes_NotarialActionTypeId">
+          <End Role="NotarialActionsTypes" Type="Self.NotarialActionsType" Multiplicity="1" />
+          <End Role="NotarialActionsObjects" Type="Self.NotarialActionsObject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NotarialActionsTypes">
+              <PropertyRef Name="NotarialActionTypeId" />
+            </Principal>
+            <Dependent Role="NotarialActionsObjects">
+              <PropertyRef Name="NotarialActionTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LegalNotesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clients" EntityType="Self.Client" />
+          <EntitySet Name="Documents" EntityType="Self.Document" />
+          <EntitySet Name="NotarialActions" EntityType="Self.NotarialAction" />
+          <EntitySet Name="NotarialActionsObjects" EntityType="Self.NotarialActionsObject" />
+          <EntitySet Name="NotarialActionsTypes" EntityType="Self.NotarialActionsType" />
+          <AssociationSet Name="FK_Documents_Clients_ClientId" Association="Self.FK_Documents_Clients_ClientId">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="Documents" EntitySet="Documents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Documents_NotarialActions_NotarialActionId" Association="Self.FK_Documents_NotarialActions_NotarialActionId">
+            <End Role="NotarialActions" EntitySet="NotarialActions" />
+            <End Role="Documents" EntitySet="Documents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Documents_NotarialActionsObjects_NotarialActionObjectId" Association="Self.FK_Documents_NotarialActionsObjects_NotarialActionObjectId">
+            <End Role="NotarialActionsObjects" EntitySet="NotarialActionsObjects" />
+            <End Role="Documents" EntitySet="Documents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Documents_NotarialActionsTypes_NotarialActionTypeId" Association="Self.FK_Documents_NotarialActionsTypes_NotarialActionTypeId">
+            <End Role="NotarialActionsTypes" EntitySet="NotarialActionsTypes" />
+            <End Role="Documents" EntitySet="Documents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NotarialActionsTypes_NotarialActions_NotarialActionId" Association="Self.FK_NotarialActionsTypes_NotarialActions_NotarialActionId">
+            <End Role="NotarialActions" EntitySet="NotarialActions" />
+            <End Role="NotarialActionsTypes" EntitySet="NotarialActionsTypes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NotarialActionsObjects_NotarialActionsTypes_NotarialActionTypeId" Association="Self.FK_NotarialActionsObjects_NotarialActionsTypes_NotarialActionTypeId">
+            <End Role="NotarialActionsTypes" EntitySet="NotarialActionsTypes" />
+            <End Role="NotarialActionsObjects" EntitySet="NotarialActionsObjects" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="LegalNotesModelStoreContainer" CdmEntityContainer="LegalNotesEntities">
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="LegalNotesModel.Client">
+              <MappingFragment StoreEntitySet="Clients">
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="PassportNumber" ColumnName="PassportNumber" />
+                <ScalarProperty Name="PassportData" ColumnName="PassportData" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Documents">
+            <EntityTypeMapping TypeName="LegalNotesModel.Document">
+              <MappingFragment StoreEntitySet="Documents">
+                <ScalarProperty Name="DocumentId" ColumnName="DocumentId" />
+                <ScalarProperty Name="NotarialActionId" ColumnName="NotarialActionId" />
+                <ScalarProperty Name="NotarialActionTypeId" ColumnName="NotarialActionTypeId" />
+                <ScalarProperty Name="NotarialActionObjectId" ColumnName="NotarialActionObjectId" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NotarialActions">
+            <EntityTypeMapping TypeName="LegalNotesModel.NotarialAction">
+              <MappingFragment StoreEntitySet="NotarialActions">
+                <ScalarProperty Name="NotarialActionId" ColumnName="NotarialActionId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NotarialActionsObjects">
+            <EntityTypeMapping TypeName="LegalNotesModel.NotarialActionsObject">
+              <MappingFragment StoreEntitySet="NotarialActionsObjects">
+                <ScalarProperty Name="NotarialActionObjectId" ColumnName="NotarialActionObjectId" />
+                <ScalarProperty Name="NotarialActionTypeId" ColumnName="NotarialActionTypeId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NotarialActionsTypes">
+            <EntityTypeMapping TypeName="LegalNotesModel.NotarialActionsType">
+              <MappingFragment StoreEntitySet="NotarialActionsTypes">
+                <ScalarProperty Name="NotarialActionTypeId" ColumnName="NotarialActionTypeId" />
+                <ScalarProperty Name="NotarialActionId" ColumnName="NotarialActionId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
