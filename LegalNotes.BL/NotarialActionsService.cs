@@ -26,9 +26,9 @@ namespace LegalNotes.BL
             notarialActionsDataService.AddDocument(document);
         }
 
-        public void UpdateDocument(int id, Document document)
+        public void UpdateDocument(Document document)
         {
-            notarialActionsDataService.UpdateDocument(id, document);
+            notarialActionsDataService.UpdateDocument(document);
         }
 
         public IEnumerable<Document> GetDocuments(Filters filters)
@@ -38,7 +38,7 @@ namespace LegalNotes.BL
 
         public int GetNewDocumentId()
         {
-            return this.notarialActionsDataService.GetNextDocumentId();
+            return this.notarialActionsDataService.GetNextDocumentRecordNumber();
         }
 
         public void Delete(Document document)

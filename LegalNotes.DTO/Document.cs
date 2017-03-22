@@ -7,7 +7,13 @@ namespace LegalNotes.DTO
 {
     public class Document
     {
+        public Document()
+        {
+            Client = new Client();
+        }
+
         public int DocumentId { get; set; }
+        public int RecordNumber { get; set; }
 
         public virtual NotarialAction NotarialAction { get; set; }
         public virtual NotarialActionsObject NotarialActionsObject { get; set; }
@@ -18,8 +24,5 @@ namespace LegalNotes.DTO
 
         public DateTime CreateDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
-
-
-        public DateTime LastAccessdate { get { return ModifiedDate.HasValue && ModifiedDate > CreateDate ? ModifiedDate.Value : CreateDate; } }
     }
 }

@@ -26,7 +26,6 @@ namespace LegalNotes.UI
 
         private VM.CreateOrUpdateDocument viewModel = new VM.CreateOrUpdateDocument();
         private bool isNewDocument = true;
-        private int oldId;
 
         public CreateOrUpdateDocument() : this(new Document())
         {
@@ -34,8 +33,11 @@ namespace LegalNotes.UI
 
         public CreateOrUpdateDocument(Document document)
         {
-            viewModel.Document = document;
+            if (document.DocumentId != 0)
+                isNewDocument = false;
 
+            viewModel.Document = document;
+            
             InitializeComponent();
 
             InitControls();
@@ -43,15 +45,13 @@ namespace LegalNotes.UI
 
         private void InitControls()
         {
-            if (viewModel.Document.DocumentId == 0)
+            if (isNewDocument)
             {
-                viewModel.Document.DocumentId = notarialActionsService.GetNewDocumentId();
+                viewModel.Document.RecordNumber = notarialActionsService.GetNewDocumentId();
                 this.Title = "Добавить документ";
             }
             else
             {
-                isNewDocument = false;
-                oldId = viewModel.Document.DocumentId;
                 this.Title = "Изменить документ";
             }
 
@@ -110,30 +110,24 @@ namespace LegalNotes.UI
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
-            var document = new Document
-            {
-                DocumentId = int.Parse(txtId.Text),
-                CreateDate = DateTime.UtcNow,
-                Price = decimal.Parse(txtSum.Text),
-                NotarialAction = cmbNotarialActions.SelectedItem as NotarialAction,
-                NotarialActionsType = cmbNotarialTypes.SelectedItem as NotarialActionsType,
-                NotarialActionsObject = cmbNotarialObjects.SelectedItem as NotarialActionsObject,
-                Client = new Client
-                {
-                    CreateDate = DateTime.UtcNow,
-                    PassportNumber = txtPassportNumber.Text.Trim().ToUpper(),
-                    PassportData = txtPassportData.Text,
-                    Address = txtAddress.Text,
-                    Name = txtFirstName.Text.Trim(),
-                    LastName = txtLastName.Text.Trim(),
-                    MiddleName = txtMiddleName.Text.Trim()
-                }
-            };
+            viewModel.Document.RecordNumber = int.Parse(txtRecordNumber.Text);
+            viewModel.Document.CreateDate = DateTime.UtcNow;
+            viewModel.Document.Price = decimal.Parse(txtSum.Text);
+            viewModel.Document.NotarialAction = cmbNotarialActions.SelectedItem as NotarialAction;
+            viewModel.Document.NotarialActionsType = cmbNotarialTypes.SelectedItem as NotarialActionsType;
+            viewModel.Document.NotarialActionsObject = cmbNotarialObjects.SelectedItem as NotarialActionsObject;
+            viewModel.Document.Client.CreateDate = DateTime.UtcNow;
+            viewModel.Document.Client.PassportNumber = txtPassportNumber.Text.Trim().ToUpper();
+            viewModel.Document.Client.PassportData = txtPassportData.Text;
+            viewModel.Document.Client.Address = txtAddress.Text;
+            viewModel.Document.Client.Name = txtFirstName.Text.Trim();
+            viewModel.Document.Client.LastName = txtLastName.Text.Trim();
+            viewModel.Document.Client.MiddleName = txtMiddleName.Text.Trim();
 
             if (isNewDocument)
-                notarialActionsService.CreateDocument(document);
+                notarialActionsService.CreateDocument(viewModel.Document);
             else
-                notarialActionsService.UpdateDocument(oldId, document);
+                notarialActionsService.UpdateDocument(viewModel.Document);
 
             this.Close();
         }

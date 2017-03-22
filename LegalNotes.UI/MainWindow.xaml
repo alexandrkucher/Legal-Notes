@@ -14,7 +14,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,5,5">
                         <Button x:Name="btnAddDocument" Content="Добавить" Width="80" HorizontalAlignment="Left" Click="btnAddDocument_Click"/>
                     </StackPanel>
                     <StackPanel Grid.Row="0" Margin="0,5,0,5"  Orientation="Horizontal" HorizontalAlignment="Left">
@@ -91,7 +91,8 @@
                             </Style>
                         </DataGrid.ItemContainerStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Номер" Binding="{Binding DocumentId}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Id" Binding="{Binding DocumentId}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Номер записи" Binding="{Binding RecordNumber}" IsReadOnly="True" />
                             <DataGridTextColumn Header="Документ" Binding="{Binding NotarialAction.Name}"  IsReadOnly="True"/>
                             <DataGridTextColumn Header="Тип документа" Binding="{Binding NotarialActionsType.Name}"  IsReadOnly="True"/>
                             <DataGridTextColumn Header="Объект" Binding="{Binding NotarialActionsObject.Name}"  IsReadOnly="True"/>

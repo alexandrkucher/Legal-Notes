@@ -22,6 +22,7 @@ namespace LegalNotes.DAL.DB
         public decimal Price { get; set; }
         public System.DateTime CreateDate { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
+        public int RecordNumber { get; set; }
     
         public virtual Client Client { get; set; }
         public virtual NotarialAction NotarialAction { get; set; }

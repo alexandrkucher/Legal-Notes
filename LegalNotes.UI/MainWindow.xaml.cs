@@ -94,7 +94,7 @@ namespace LegalNotes.UI
 
             var selectedDocument = dgrDocuments.SelectedItem as Document;
 
-            var dialogResult = MessageBox.Show(String.Format("Вы действительлно хотите удалить запись под номером {0}?", selectedDocument.DocumentId), "Внимание", MessageBoxButton.OKCancel);
+            var dialogResult = MessageBox.Show(String.Format("Вы действительлно хотите удалить запись под номером {0}?", selectedDocument.RecordNumber), "Внимание", MessageBoxButton.OKCancel);
             if (dialogResult == MessageBoxResult.OK)
             {
                 notarialActionsService.Delete(selectedDocument);

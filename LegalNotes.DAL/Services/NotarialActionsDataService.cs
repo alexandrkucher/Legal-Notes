@@ -19,11 +19,11 @@ namespace LegalNotes.DAL.Services
             }
         }
 
-        public int GetNextDocumentId()
+        public int GetNextDocumentRecordNumber()
         {
             using (var dbContext = new LegalNotesEntities())
             {
-                return dbContext.Documents.Any() ? dbContext.Documents.Max(x => x.DocumentId) + 1 : 1;
+                return dbContext.Documents.Any() ? dbContext.Documents.Max(x => x.RecordNumber) + 1 : 1;
             }
         }
 
@@ -61,8 +61,7 @@ namespace LegalNotes.DAL.Services
             using (var dbContext = new LegalNotesEntities())
             {
                 var newDBDoc = new DAL.DB.Document
-                {
-                    DocumentId = newDocument.DocumentId,
+                {                    
                     CreateDate = DateTime.UtcNow,
                     Client = new DAL.DB.Client
                     {
@@ -77,11 +76,11 @@ namespace LegalNotes.DAL.Services
             }
         }
 
-        public void UpdateDocument(int id, DTO.Document document)
+        public void UpdateDocument(DTO.Document document)
         {
             using (var dbContext = new LegalNotesEntities())
             {
-                var existingDocument = dbContext.Documents.FirstOrDefault(x => x.DocumentId == id);
+                var existingDocument = dbContext.Documents.FirstOrDefault(x => x.DocumentId == document.DocumentId);
 
                 existingDocument.ModifiedDate = DateTime.UtcNow;
                 existingDocument.Client.ModifiedDate = DateTime.UtcNow;
@@ -104,6 +103,7 @@ namespace LegalNotes.DAL.Services
 
         private void UpdateDBDocumentFromModel(DB.Document existingDocument, DTO.Document document)
         {
+            existingDocument.RecordNumber = document.RecordNumber;
             existingDocument.Price = document.Price;
             existingDocument.NotarialActionId = document.NotarialAction.NotarialActionId;
             existingDocument.NotarialActionTypeId = document.NotarialActionsType?.NotarialActionTypeId;
@@ -122,6 +122,7 @@ namespace LegalNotes.DAL.Services
                 dbContext.Documents.Select(source => new DTO.Document
                 {
                     DocumentId = source.DocumentId,
+                    RecordNumber = source.RecordNumber,
                     CreateDate = source.CreateDate,
                     ModifiedDate = source.ModifiedDate,
                     Price = source.Price,

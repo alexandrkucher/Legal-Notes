@@ -12,8 +12,8 @@
             <StackPanel Margin="5">
                 <GroupBox Header="Документ">
                     <StackPanel Margin="10">
-                        <Label Content="Номер" Target="{Binding ElementName=txtId}" />
-                        <TextBox x:Name="txtId" Text="{Binding Document.DocumentId}"/>
+                        <Label Content="Номер записи" Target="{Binding ElementName=txtId}" />
+                        <TextBox x:Name="txtRecordNumber" Text="{Binding Document.RecordNumber}"/>
                         <Label Content="Документ" Target="{Binding ElementName=cmbNotarialActions}" />
                         <ComboBox 
                             x:Name="cmbNotarialActions"
