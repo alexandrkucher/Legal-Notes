@@ -20,5 +20,30 @@ namespace LegalNotes.BL
         {
             return this.notarialActionsDataService.GetNotarialActions();
         }
+
+        public void CreateDocument(Document document)
+        {
+            notarialActionsDataService.AddDocument(document);
+        }
+
+        public void UpdateDocument(int id, Document document)
+        {
+            notarialActionsDataService.UpdateDocument(id, document);
+        }
+
+        public IEnumerable<Document> GetDocuments(Filters filters)
+        {
+            return this.notarialActionsDataService.GetDocuments(filters);
+        }
+
+        public int GetNewDocumentId()
+        {
+            return this.notarialActionsDataService.GetNextDocumentId();
+        }
+
+        public void Delete(Document document)
+        {
+            this.notarialActionsDataService.DeleteDocument(document);
+        }
     }
 }

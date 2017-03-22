@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="LegalNotesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="LegalNotesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Clients">
           <Key>
             <PropertyRef Name="ClientId" />
@@ -17,6 +17,7 @@
           <Property Name="PassportData" Type="nvarchar" MaxLength="1024" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="Address" Type="nvarchar" MaxLength="1024" />
         </EntityType>
         <EntityType Name="Documents">
           <Key>
@@ -157,8 +158,7 @@
             <End Role="NotarialActionsTypes" EntitySet="NotarialActionsTypes" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="LegalNotesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -175,6 +175,7 @@
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Documents" Relationship="Self.FK_Documents_Clients_ClientId" FromRole="Clients" ToRole="Documents" />
+          <Property Name="Address" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Document">
           <Key>
@@ -335,6 +336,7 @@
           <EntitySetMapping Name="Clients">
             <EntityTypeMapping TypeName="LegalNotesModel.Client">
               <MappingFragment StoreEntitySet="Clients">
+                <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="ClientId" ColumnName="ClientId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />

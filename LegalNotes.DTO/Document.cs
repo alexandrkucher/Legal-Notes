@@ -13,10 +13,13 @@ namespace LegalNotes.DTO
         public virtual NotarialActionsObject NotarialActionsObject { get; set; }
         public virtual NotarialActionsType NotarialActionsType { get; set; }
 
-        public virtual Client Client { get; set; }        
+        public virtual Client Client { get; set; }
         public decimal Price { get; set; }
 
         public DateTime CreateDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
+
+
+        public DateTime LastAccessdate { get { return ModifiedDate.HasValue && ModifiedDate > CreateDate ? ModifiedDate.Value : CreateDate; } }
     }
 }

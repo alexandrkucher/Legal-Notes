@@ -1,0 +1,69 @@
+﻿<Window x:Class="LegalNotes.UI.CreateOrUpdateDocument"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LegalNotes.UI"
+        mc:Ignorable="d"
+        Title="Добавить">
+
+    <Grid>
+        <ScrollViewer>
+            <StackPanel Margin="5">
+                <GroupBox Header="Документ">
+                    <StackPanel Margin="10">
+                        <Label Content="Номер" Target="{Binding ElementName=txtId}" />
+                        <TextBox x:Name="txtId" Text="{Binding Document.DocumentId}"/>
+                        <Label Content="Документ" Target="{Binding ElementName=cmbNotarialActions}" />
+                        <ComboBox 
+                        x:Name="cmbNotarialActions"
+                        ItemsSource="{Binding NotarialActions}"
+                        SelectedIndex="0"
+                        IsEditable="True" 
+                        DisplayMemberPath="Name"
+                        SelectionChanged="cmbNotarialActions_SelectionChanged"/>
+                        <Label Content="Тип" Target="{Binding ElementName=cmbNotarialTypes}" Visibility="{Binding ElementName=cmbNotarialTypes, Path=Visibility}"/>
+                        <ComboBox 
+                        x:Name="cmbNotarialTypes"
+                        ItemsSource="{Binding}"
+                        SelectedIndex="0"
+                        IsSynchronizedWithCurrentItem="True"
+                        IsEditable="True" 
+                        DisplayMemberPath="Name"
+                        SelectionChanged="cmbNotarialTypes_SelectionChanged"/>
+                        <Label Content="Объект" Target="{Binding ElementName=cmbNotarialObjects}" Visibility="{Binding ElementName=cmbNotarialObjects, Path=Visibility}"/>
+                        <ComboBox 
+                        x:Name="cmbNotarialObjects"
+                        ItemsSource="{Binding}"
+                        SelectedIndex="0"
+                        IsSynchronizedWithCurrentItem="True"
+                        IsEditable="True"
+                        DisplayMemberPath="Name"/>
+                        <Label Content="Сумма (грн)" Target="{Binding ElementName=cmbNotarialObjects}" />
+                        <TextBox Name="txtSum" Text="{Binding Document.Price}"/>
+                    </StackPanel >
+                </GroupBox>
+                <GroupBox Header="Клиент">
+                    <StackPanel Margin="10">
+                        <Label Content="Фамилия" Target="{Binding ElementName=txtLastName}" />
+                        <TextBox x:Name="txtLastName" Text="{Binding Document.Client.LastName}"/>
+                        <Label Content="Имя" Target="{Binding ElementName=txtFirstName}" />
+                        <TextBox x:Name="txtFirstName" Text="{Binding Document.Client.Name}"/>
+                        <Label Content="Отчество" Target="{Binding ElementName=txtMiddleName}" />
+                        <TextBox x:Name="txtMiddleName" Text="{Binding Document.Client.MiddleName}"/>
+                        <Label Content="Серия и номер паспорта" Target="{Binding ElementName=txtPassportNumber}" />
+                        <TextBox x:Name="txtPassportNumber" Text="{Binding Document.Client.PassportNumber}"/>
+                        <Label Content="Кем выдан" Target="{Binding ElementName=txtPassportData}" />
+                        <TextBox x:Name="txtPassportData" TextWrapping="Wrap" AcceptsReturn="True" Height="40" Text="{Binding Document.Client.PassportData}"/>
+                        <Label Content="Адрес" Target="{Binding ElementName=txtAddress}" />
+                        <TextBox x:Name="txtAddress" TextWrapping="Wrap" AcceptsReturn="True" Height="40" Text="{Binding Document.Client.Address}"/>
+                    </StackPanel>
+                </GroupBox>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                    <Button x:Name="btnOK" Content="OK" IsDefault="True" Width="70" Margin="0,0,5,0" Click="btnOK_Click"/>
+                    <Button x:Name="btnCancel" Content="Отменить" Width="70" Click="btnCancel_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

@@ -7,22 +7,58 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <StackPanel Orientation="Horizontal" Height="30" HorizontalAlignment="Left">
-            <ComboBox x:Name="cmbNotarialActions"
-                      ItemsSource="{Binding}"
-                      IsEditable="True" 
-                      Text="{Binding Name}"
-                      SelectionChanged="cmbNotarialActions_SelectionChanged"/>
-            <ComboBox x:Name="cmbNotarialTypes"
-                      ItemsSource="{Binding}"
-                      IsEditable="True" 
-                      Text="{Binding Name}"
-                      SelectionChanged="cmbNotarialTypes_SelectionChanged"/>
-            <ComboBox x:Name="cmbNotarialObjects"
-                      ItemsSource="{Binding}"
-                      IsEditable="True"
-                      Text="{Binding Name}"/>
-        </StackPanel>
-        
+        <TabControl>
+            <TabItem Header="Документы">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button x:Name="btnAddDocument" Content="Добавить" Width="80" HorizontalAlignment="Left" Click="btnAddDocument_Click"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="0" Margin="0,5,0,5"  Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Label Content="С:" Target="{Binding ElementName=dtpFrom}" />
+                        <DatePicker x:Name="dtpFrom" />
+                        <Label Content="По:" Target="{Binding ElementName=dtpTo}" />
+                        <DatePicker x:Name="dtpTo" />
+                        <Button x:Name="btnLoad" Content="Загрузить" Click="btnLoad_Click" Margin="5,0,0,0"/>
+                    </StackPanel>
+                    <DataGrid x:Name="dgrDocuments" 
+                          Grid.Row="1"
+                          HorizontalAlignment="Stretch" 
+                          VerticalAlignment="Top" 
+                          ItemsSource="{Binding}"
+                          AutoGenerateColumns="False" 
+                          CanUserSortColumns="False"
+                          PreviewKeyDown="dgrDocuments_PreviewKeyDown">
+                        <DataGrid.ItemContainerStyle>
+                            <Style TargetType="DataGridRow">
+                                <EventSetter Event="MouseDoubleClick" Handler="dgrDocuments_Row_MouseDoubleClick"/>
+                            </Style>
+                        </DataGrid.ItemContainerStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Номер" Binding="{Binding DocumentId}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Документ" Binding="{Binding NotarialAction.Name}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Тип документа" Binding="{Binding NotarialActionsType.Name}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Объект" Binding="{Binding NotarialActionsObject.Name}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Дата создания" Binding="{Binding CreateDate}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Дата изменения" Binding="{Binding ModifiedDate}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Стоимость (грн)" Binding="{Binding Price}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Паспорт клиента" Binding="{Binding Client.PassportNumber}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Кем выдан" Binding="{Binding Client.PassportData}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Фамилия" Binding="{Binding Client.LastName}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Имя" Binding="{Binding Client.Name}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Отчество" Binding="{Binding Client.MiddleName}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Адрес" Binding="{Binding Client.Address}"  IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Отчеты">
+            </TabItem>
+        </TabControl>
+
+
     </Grid>
 </Window>

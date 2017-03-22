@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Client.cs" />
     <Compile Include="Document.cs" />
+    <Compile Include="Filters.cs" />
     <Compile Include="NotarialAction.cs" />
     <Compile Include="NotarialActionsObject.cs" />
     <Compile Include="NotarialActionsType.cs" />

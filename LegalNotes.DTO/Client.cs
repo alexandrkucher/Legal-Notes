@@ -13,6 +13,7 @@ namespace LegalNotes.DTO
         public string LastName { get; set; }
         public string PassportNumber { get; set; }
         public string PassportData { get; set; }
+        public string Address { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
     }

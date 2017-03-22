@@ -113,13 +113,6 @@
       <DependentUpon>LegalNotesModel.edmx</DependentUpon>
       <LastGenOutput>LegalNotesModel.cs</LastGenOutput>
     </Content>
-    <Content Include="LegalNotes.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="LegalNotes_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>LegalNotes.mdf</DependentUpon>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
