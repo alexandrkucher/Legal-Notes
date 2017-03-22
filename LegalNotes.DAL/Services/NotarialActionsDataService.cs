@@ -31,26 +31,56 @@ namespace LegalNotes.DAL.Services
         {
             using (var dbContext = new LegalNotesEntities())
             {
-                var query = GetDocumentsQuery(dbContext);
-                if (filters.StartDate.HasValue)
-                    query = query.Where(x => x.ModifiedDate.HasValue && x.ModifiedDate > x.CreateDate ?
-                                                x.ModifiedDate >= filters.StartDate :
-                                                x.CreateDate >= filters.StartDate);
-                if (filters.EndDate.HasValue)
-                {
-                    var endDate = filters.EndDate.Value.AddDays(1);
-                    query = query.Where(x => x.ModifiedDate.HasValue && x.ModifiedDate > x.CreateDate ?
-                                                x.ModifiedDate <= endDate :
-                                                x.CreateDate <= endDate);
-                }
-                if (filters.NotarialActionId.HasValue)
-                    query = query.Where(x => x.NotarialAction.NotarialActionId == filters.NotarialActionId);
-                if (filters.NotarialActionTypeId.HasValue)
-                    query = query.Where(x => x.NotarialActionsType.NotarialActionTypeId == filters.NotarialActionTypeId);
-                if (filters.NotarialActionObjectId.HasValue)
-                    query = query.Where(x => x.NotarialActionsObject.NotarialActionObjectId == filters.NotarialActionObjectId);
+                var query = GetFilteredQuery(dbContext, filters);
 
                 query = query.OrderByDescending(x => x.ModifiedDate.HasValue && x.ModifiedDate > x.CreateDate ? x.ModifiedDate : x.CreateDate);
+
+                return query.ToList();
+            }
+        }
+
+        private IQueryable<DTO.Document> GetFilteredQuery(LegalNotesEntities dbContext, Filters filters)
+        {
+            var query = GetDocumentsQuery(dbContext);
+            if (filters.StartDate.HasValue)
+                query = query.Where(x => x.ModifiedDate.HasValue && x.ModifiedDate > x.CreateDate ?
+                                            x.ModifiedDate >= filters.StartDate :
+                                            x.CreateDate >= filters.StartDate);
+            if (filters.EndDate.HasValue)
+            {
+                var endDate = filters.EndDate.Value.AddDays(1);
+                query = query.Where(x => x.ModifiedDate.HasValue && x.ModifiedDate > x.CreateDate ?
+                                            x.ModifiedDate <= endDate :
+                                            x.CreateDate <= endDate);
+            }
+            if (filters.NotarialActionId.HasValue)
+                query = query.Where(x => x.NotarialAction.NotarialActionId == filters.NotarialActionId);
+            if (filters.NotarialActionTypeId.HasValue)
+                query = query.Where(x => x.NotarialActionsType.NotarialActionTypeId == filters.NotarialActionTypeId);
+            if (filters.NotarialActionObjectId.HasValue)
+                query = query.Where(x => x.NotarialActionsObject.NotarialActionObjectId == filters.NotarialActionObjectId);
+
+            return query;
+        }
+
+        public IEnumerable<NotarialActionSum> GetNotarialActionsSums(Filters filters)
+        {
+            using (var dbContext = new LegalNotesEntities())
+            {
+                var query = from d in GetFilteredQuery(dbContext, filters)
+                            group d by new
+                            {
+                                d.NotarialAction,
+                                d.NotarialActionsType,
+                                d.NotarialActionsObject
+                            } into docsGroup
+                            select new NotarialActionSum
+                            {
+                                NotarialAction = docsGroup.Key.NotarialAction,
+                                NotarialActionsType = docsGroup.Key.NotarialActionsType,
+                                NotarialActionsObject = docsGroup.Key.NotarialActionsObject,
+                                Sum = docsGroup.Sum(x => x.Price)
+                            };
 
                 return query.ToList();
             }
@@ -61,7 +91,7 @@ namespace LegalNotes.DAL.Services
             using (var dbContext = new LegalNotesEntities())
             {
                 var newDBDoc = new DAL.DB.Document
-                {                    
+                {
                     CreateDate = DateTime.UtcNow,
                     Client = new DAL.DB.Client
                     {

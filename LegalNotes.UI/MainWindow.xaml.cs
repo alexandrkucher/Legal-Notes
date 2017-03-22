@@ -55,14 +55,7 @@ namespace LegalNotes.UI
 
         private void LoadDocuments()
         {
-            var filters = new Filters
-            {
-                StartDate = dtpFrom.SelectedDate.Value.Date,
-                EndDate = dtpTo.SelectedDate.Value.Date,
-                NotarialActionId = cmbNotarialActions.SelectedIndex <= 0 ? (int?)null : (cmbNotarialActions.SelectedItem as NotarialAction).NotarialActionId,
-                NotarialActionTypeId = cmbNotarialActionsTypes.SelectedIndex <= 0 ? (int?)null : (cmbNotarialActionsTypes.SelectedItem as NotarialActionsType).NotarialActionTypeId,
-                NotarialActionObjectId = cmbNotarialActionsObjects.SelectedIndex <= 0 ? (int?)null : (cmbNotarialActionsObjects.SelectedItem as NotarialActionsObject).NotarialActionObjectId
-            };
+            var filters = GetFilters();
 
             viewModel.Documents.Clear();
 
@@ -148,6 +141,25 @@ namespace LegalNotes.UI
                 cmbNotarialActionsObjects.DataContext = selectedItem.NotarialActionsObjects;
                 cmbNotarialActionsObjects.Visibility = Visibility.Visible;
             }
+        }
+
+        private void btnReport_Click(object sender, RoutedEventArgs e)
+        {
+            var filters = GetFilters();
+            var reportWindow = new Report(filters);
+            reportWindow.ShowDialog();
+        }
+
+        private Filters GetFilters()
+        {
+            return new Filters
+            {
+                StartDate = dtpFrom.SelectedDate.Value.Date,
+                EndDate = dtpTo.SelectedDate.Value.Date,
+                NotarialActionId = cmbNotarialActions.SelectedIndex <= 0 ? (int?)null : (cmbNotarialActions.SelectedItem as NotarialAction).NotarialActionId,
+                NotarialActionTypeId = cmbNotarialActionsTypes.SelectedIndex <= 0 ? (int?)null : (cmbNotarialActionsTypes.SelectedItem as NotarialActionsType).NotarialActionTypeId,
+                NotarialActionObjectId = cmbNotarialActionsObjects.SelectedIndex <= 0 ? (int?)null : (cmbNotarialActionsObjects.SelectedItem as NotarialActionsObject).NotarialActionObjectId
+            };
         }
     }
 }

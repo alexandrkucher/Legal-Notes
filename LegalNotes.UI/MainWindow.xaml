@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LegalNotes.UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Legal Notes">
     <Grid>
         <TabControl>
             <TabItem Header="Документы">
@@ -13,6 +13,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,5,5">
                         <Button x:Name="btnAddDocument" Content="Добавить" Width="80" HorizontalAlignment="Left" Click="btnAddDocument_Click"/>
@@ -83,7 +84,8 @@
                           ItemsSource="{Binding Documents}"
                           AutoGenerateColumns="False" 
                           CanUserSortColumns="False"
-                          CanUserAddRows="false"
+                          CanUserAddRows="False"
+                          SelectionUnit="Cell"
                           PreviewKeyDown="dgrDocuments_PreviewKeyDown">
                         <DataGrid.ItemContainerStyle>
                             <Style TargetType="DataGridRow">
@@ -106,13 +108,17 @@
                             <DataGridTextColumn Header="Отчество" Binding="{Binding Client.MiddleName}"  IsReadOnly="True"/>
                             <DataGridTextColumn Header="Адрес" Binding="{Binding Client.Address}"  IsReadOnly="True"/>
                         </DataGrid.Columns>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Command="Copy" />
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
                     </DataGrid>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button x:Name="btnReport" Content="Отчет" Width="150" Height="50" FontSize="22" Margin="0,0,15,15" Click="btnReport_Click" />
+                    </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Отчеты">
-            </TabItem>
         </TabControl>
-
-
     </Grid>
 </Window>
