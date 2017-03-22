@@ -16,29 +16,29 @@
                         <TextBox x:Name="txtId" Text="{Binding Document.DocumentId}"/>
                         <Label Content="Документ" Target="{Binding ElementName=cmbNotarialActions}" />
                         <ComboBox 
-                        x:Name="cmbNotarialActions"
-                        ItemsSource="{Binding NotarialActions}"
-                        SelectedIndex="0"
-                        IsEditable="True" 
-                        DisplayMemberPath="Name"
-                        SelectionChanged="cmbNotarialActions_SelectionChanged"/>
+                            x:Name="cmbNotarialActions"
+                            ItemsSource="{Binding NotarialActions}"
+                            SelectedIndex="0"
+                            IsEditable="True" 
+                            DisplayMemberPath="Name"
+                            SelectionChanged="cmbNotarialActions_SelectionChanged"/>
                         <Label Content="Тип" Target="{Binding ElementName=cmbNotarialTypes}" Visibility="{Binding ElementName=cmbNotarialTypes, Path=Visibility}"/>
                         <ComboBox 
-                        x:Name="cmbNotarialTypes"
-                        ItemsSource="{Binding}"
-                        SelectedIndex="0"
-                        IsSynchronizedWithCurrentItem="True"
-                        IsEditable="True" 
-                        DisplayMemberPath="Name"
-                        SelectionChanged="cmbNotarialTypes_SelectionChanged"/>
+                            x:Name="cmbNotarialTypes"
+                            ItemsSource="{Binding}"
+                            SelectedIndex="0"
+                            IsSynchronizedWithCurrentItem="True"
+                            IsEditable="True" 
+                            DisplayMemberPath="Name"
+                            SelectionChanged="cmbNotarialTypes_SelectionChanged"/>
                         <Label Content="Объект" Target="{Binding ElementName=cmbNotarialObjects}" Visibility="{Binding ElementName=cmbNotarialObjects, Path=Visibility}"/>
                         <ComboBox 
-                        x:Name="cmbNotarialObjects"
-                        ItemsSource="{Binding}"
-                        SelectedIndex="0"
-                        IsSynchronizedWithCurrentItem="True"
-                        IsEditable="True"
-                        DisplayMemberPath="Name"/>
+                            x:Name="cmbNotarialObjects"
+                            ItemsSource="{Binding}"
+                            SelectedIndex="0"
+                            IsSynchronizedWithCurrentItem="True"
+                            IsEditable="True"
+                            DisplayMemberPath="Name"/>
                         <Label Content="Сумма (грн)" Target="{Binding ElementName=cmbNotarialObjects}" />
                         <TextBox Name="txtSum" Text="{Binding Document.Price}"/>
                     </StackPanel >

@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LegalNotes.BL;
 using LegalNotes.DTO;
+using LegalNotes.UI.ViewModels;
 
 namespace LegalNotes.UI
 {
@@ -24,52 +25,56 @@ namespace LegalNotes.UI
     public partial class MainWindow : Window
     {
         private readonly NotarialActionsService notarialActionsService = new NotarialActionsService();
-
-        private ObservableCollection<Document> documents = new ObservableCollection<Document>();
+        private DocumentsList viewModel = new DocumentsList();
 
         public MainWindow()
         {
             InitializeComponent();
 
             InitControls();
-            ReloadData();
+            LoadDocuments();
         }
 
         private void InitControls()
         {
-            dgrDocuments.DataContext = documents;
+            viewModel.NotarialActions = notarialActionsService.GetNotarialActions();
+
+            this.DataContext = viewModel;
             dtpFrom.SelectedDate = DateTime.Now.AddMonths(-1);
             dtpTo.SelectedDate = DateTime.Now;
         }
-        
+
         private void btnAddDocument_Click(object sender, RoutedEventArgs e)
         {
             var addDocumentPage = new CreateOrUpdateDocument();
             addDocumentPage.Owner = this;
             addDocumentPage.ShowDialog();
 
-            ReloadData();
+            LoadDocuments();
         }
 
-        private void ReloadData()
+        private void LoadDocuments()
         {
             var filters = new Filters
             {
                 StartDate = dtpFrom.SelectedDate.Value.Date,
-                EndDate = dtpTo.SelectedDate.Value.Date
+                EndDate = dtpTo.SelectedDate.Value.Date,
+                NotarialActionId = cmbNotarialActions.SelectedIndex <= 0 ? (int?)null : (cmbNotarialActions.SelectedItem as NotarialAction).NotarialActionId,
+                NotarialActionTypeId = cmbNotarialActionsTypes.SelectedIndex <= 0 ? (int?)null : (cmbNotarialActionsTypes.SelectedItem as NotarialActionsType).NotarialActionTypeId,
+                NotarialActionObjectId = cmbNotarialActionsObjects.SelectedIndex <= 0 ? (int?)null : (cmbNotarialActionsObjects.SelectedItem as NotarialActionsObject).NotarialActionObjectId
             };
 
-            documents.Clear();
+            viewModel.Documents.Clear();
 
             var docs = notarialActionsService.GetDocuments(filters);
             foreach (var doc in docs)
-                documents.Add(doc);
+                viewModel.Documents.Add(doc);
 
         }
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
-            ReloadData();
+            LoadDocuments();
         }
 
         private void dgrDocuments_Row_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -79,8 +84,8 @@ namespace LegalNotes.UI
             updateDocumentPage.Owner = this;
             updateDocumentPage.ShowDialog();
 
-            ReloadData();
-        }        
+            LoadDocuments();
+        }
 
         private void dgrDocuments_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -96,6 +101,53 @@ namespace LegalNotes.UI
             }
             else
                 e.Handled = true;
+        }
+
+        private void cmbNotarialActions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count == 0)
+                return;
+
+            var selectedItem = e.AddedItems[0] as NotarialAction;
+
+            if (selectedItem == null || !selectedItem.NotarialActionsTypes.Any())
+            {
+                if (cmbNotarialActionsTypes != null)
+                    cmbNotarialActionsTypes.Visibility = Visibility.Collapsed;
+                if (cmbNotarialActionsObjects != null)
+                {
+                    cmbNotarialActionsObjects.Visibility = Visibility.Collapsed;
+                    cmbNotarialActionsObjects.DataContext = null;
+                    cmbNotarialActionsObjects.DataContext = null;
+                }
+            }
+            else
+            {
+                cmbNotarialActionsTypes.DataContext = selectedItem.NotarialActionsTypes;
+                cmbNotarialActionsTypes.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void cmbNotarialActionsTypes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count == 0)
+                return;
+
+            var selectedItem = e.AddedItems[0] as NotarialActionsType;
+
+            if (selectedItem == null || !selectedItem.NotarialActionsObjects.Any())
+            {
+                if (cmbNotarialActionsObjects != null)
+                {
+                    cmbNotarialActionsObjects.Visibility = Visibility.Collapsed;
+                    cmbNotarialActionsObjects.DataContext = null;
+                }
+            }
+            else
+            {
+                cmbNotarialActionsObjects.DataContext = selectedItem.NotarialActionsObjects;
+                cmbNotarialActionsObjects.Visibility = Visibility.Visible;
+            }
         }
     }
 }

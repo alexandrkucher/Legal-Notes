@@ -22,15 +22,68 @@
                         <DatePicker x:Name="dtpFrom" />
                         <Label Content="По:" Target="{Binding ElementName=dtpTo}" />
                         <DatePicker x:Name="dtpTo" />
+
+                        <Label Content="Документ:" Target="{Binding ElementName=cmbNotarialActions}"/>
+                        <ComboBox  
+                            x:Name="cmbNotarialActions"               
+                            IsEditable="True" 
+                            SelectedIndex="0"
+                            SelectionChanged="cmbNotarialActions_SelectionChanged">
+                            <ComboBox.Resources>
+                                <CollectionViewSource x:Key="NotarialActionsCollection" Source="{Binding NotarialActions}"/>
+                            </ComboBox.Resources>
+                            <ComboBox.ItemsSource>
+                                <CompositeCollection>
+                                    <ComboBoxItem Content="-- Все --" />
+                                    <CollectionContainer Collection="{Binding Source={StaticResource NotarialActionsCollection}}" />
+                                </CompositeCollection>
+                            </ComboBox.ItemsSource>
+                        </ComboBox>
+                        <Label Content="Тип документа:" Target="{Binding ElementName=cmbNotarialActionsTypes}" Visibility="{Binding ElementName=cmbNotarialActionsTypes, Path=Visibility}"/>
+                        <ComboBox 
+                            x:Name="cmbNotarialActionsTypes"
+                            SelectedIndex="0"
+                            IsSynchronizedWithCurrentItem="True"
+                            IsEditable="True" 
+                            Visibility="Collapsed"
+                            SelectionChanged="cmbNotarialActionsTypes_SelectionChanged">
+                            <ComboBox.Resources>
+                                <CollectionViewSource x:Key="NotarialActionsTypesCollection" Source="{Binding}"/>
+                            </ComboBox.Resources>
+                            <ComboBox.ItemsSource>
+                                <CompositeCollection>
+                                    <ComboBoxItem Content="-- Все --" />
+                                    <CollectionContainer Collection="{Binding Source={StaticResource NotarialActionsTypesCollection}}" />
+                                </CompositeCollection>
+                            </ComboBox.ItemsSource>
+                        </ComboBox>
+                        <Label Content="Объект:" Target="{Binding ElementName=cmbNotarialActionsObjects}" Visibility="{Binding ElementName=cmbNotarialActionsObjects, Path=Visibility}"/>
+                        <ComboBox 
+                            x:Name="cmbNotarialActionsObjects"
+                            SelectedIndex="0"
+                            IsSynchronizedWithCurrentItem="True"
+                            IsEditable="True"
+                            Visibility="Collapsed">
+                            <ComboBox.Resources>
+                                <CollectionViewSource x:Key="NotarialActionsObjectsCollection" Source="{Binding}"/>
+                            </ComboBox.Resources>
+                            <ComboBox.ItemsSource>
+                                <CompositeCollection>
+                                    <ComboBoxItem Content="-- Все --" />
+                                    <CollectionContainer Collection="{Binding Source={StaticResource NotarialActionsObjectsCollection}}" />
+                                </CompositeCollection>
+                            </ComboBox.ItemsSource>
+                        </ComboBox>
                         <Button x:Name="btnLoad" Content="Загрузить" Click="btnLoad_Click" Margin="5,0,0,0"/>
                     </StackPanel>
                     <DataGrid x:Name="dgrDocuments" 
                           Grid.Row="1"
                           HorizontalAlignment="Stretch" 
                           VerticalAlignment="Top" 
-                          ItemsSource="{Binding}"
+                          ItemsSource="{Binding Documents}"
                           AutoGenerateColumns="False" 
                           CanUserSortColumns="False"
+                          CanUserAddRows="false"
                           PreviewKeyDown="dgrDocuments_PreviewKeyDown">
                         <DataGrid.ItemContainerStyle>
                             <Style TargetType="DataGridRow">

@@ -43,6 +43,12 @@ namespace LegalNotes.DAL.Services
                                                 x.ModifiedDate <= endDate :
                                                 x.CreateDate <= endDate);
                 }
+                if (filters.NotarialActionId.HasValue)
+                    query = query.Where(x => x.NotarialAction.NotarialActionId == filters.NotarialActionId);
+                if (filters.NotarialActionTypeId.HasValue)
+                    query = query.Where(x => x.NotarialActionsType.NotarialActionTypeId == filters.NotarialActionTypeId);
+                if (filters.NotarialActionObjectId.HasValue)
+                    query = query.Where(x => x.NotarialActionsObject.NotarialActionObjectId == filters.NotarialActionObjectId);
 
                 query = query.OrderByDescending(x => x.ModifiedDate.HasValue && x.ModifiedDate > x.CreateDate ? x.ModifiedDate : x.CreateDate);
 
