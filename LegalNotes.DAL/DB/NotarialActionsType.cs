@@ -17,18 +17,18 @@ namespace LegalNotes.DAL.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public NotarialActionsType()
         {
-            this.Documents = new HashSet<Document>();
             this.NotarialActionsObjects = new HashSet<NotarialActionsObject>();
+            this.Documents = new HashSet<Document>();
         }
     
         public int NotarialActionTypeId { get; set; }
         public int NotarialActionId { get; set; }
         public string Name { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Document> Documents { get; set; }
         public virtual NotarialAction NotarialAction { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NotarialActionsObject> NotarialActionsObjects { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Document> Documents { get; set; }
     }
 }

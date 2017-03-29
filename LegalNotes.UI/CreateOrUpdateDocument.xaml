@@ -12,8 +12,12 @@
             <StackPanel Margin="5">
                 <GroupBox Header="Документ">
                     <StackPanel Margin="10">
+                        <Label Content="Дата" Target="{Binding ElementName=dtpDate}" />
+                        <DatePicker x:Name="dtpDate" SelectedDate="{Binding Document.Date}" />
                         <Label Content="Номер записи" Target="{Binding ElementName=txtId}" />
                         <TextBox x:Name="txtRecordNumber" Text="{Binding Document.RecordNumber}"/>
+                        <Label Content="Количество документов" Target="{Binding ElementName=chbDocumentsCount}" Visibility="{Binding ElementName=txtDocumentsCount, Path=Visibility}" />
+                        <TextBox x:Name="txtDocumentsCount" Text="1" />
                         <Label Content="Документ" Target="{Binding ElementName=cmbNotarialActions}" />
                         <ComboBox 
                             x:Name="cmbNotarialActions"
@@ -42,23 +46,7 @@
                         <Label Content="Сумма (грн)" Target="{Binding ElementName=cmbNotarialObjects}" />
                         <TextBox Name="txtSum" Text="{Binding Document.Price}"/>
                     </StackPanel >
-                </GroupBox>
-                <GroupBox Header="Клиент">
-                    <StackPanel Margin="10">
-                        <Label Content="Фамилия" Target="{Binding ElementName=txtLastName}" />
-                        <TextBox x:Name="txtLastName" Text="{Binding Document.Client.LastName}"/>
-                        <Label Content="Имя" Target="{Binding ElementName=txtFirstName}" />
-                        <TextBox x:Name="txtFirstName" Text="{Binding Document.Client.Name}"/>
-                        <Label Content="Отчество" Target="{Binding ElementName=txtMiddleName}" />
-                        <TextBox x:Name="txtMiddleName" Text="{Binding Document.Client.MiddleName}"/>
-                        <Label Content="Серия и номер паспорта" Target="{Binding ElementName=txtPassportNumber}" />
-                        <TextBox x:Name="txtPassportNumber" Text="{Binding Document.Client.PassportNumber}"/>
-                        <Label Content="Кем выдан" Target="{Binding ElementName=txtPassportData}" />
-                        <TextBox x:Name="txtPassportData" TextWrapping="Wrap" AcceptsReturn="True" Height="40" Text="{Binding Document.Client.PassportData}"/>
-                        <Label Content="Адрес" Target="{Binding ElementName=txtAddress}" />
-                        <TextBox x:Name="txtAddress" TextWrapping="Wrap" AcceptsReturn="True" Height="40" Text="{Binding Document.Client.Address}"/>
-                    </StackPanel>
-                </GroupBox>
+                </GroupBox>               
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
                     <Button x:Name="btnOK" Content="OK" IsDefault="True" Width="70" Margin="0,0,5,0" Click="btnOK_Click"/>
                     <Button x:Name="btnCancel" Content="Отменить" Width="70" Click="btnCancel_Click"/>

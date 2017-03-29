@@ -81,32 +81,26 @@
                           Grid.Row="1"
                           HorizontalAlignment="Stretch" 
                           VerticalAlignment="Top" 
-                          ItemsSource="{Binding Documents}"
+                          ItemsSource="{Binding DocumentsViewModels}"
                           AutoGenerateColumns="False" 
                           CanUserSortColumns="False"
                           CanUserAddRows="False"
-                          SelectionUnit="Cell"
                           PreviewKeyDown="dgrDocuments_PreviewKeyDown">
-                        <DataGrid.ItemContainerStyle>
+
+                        <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
+                                <Setter Property="Background" Value="{Binding Brush}"/>
                                 <EventSetter Event="MouseDoubleClick" Handler="dgrDocuments_Row_MouseDoubleClick"/>
                             </Style>
-                        </DataGrid.ItemContainerStyle>
+                        </DataGrid.RowStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Id" Binding="{Binding DocumentId}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="Номер записи" Binding="{Binding RecordNumber}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="Документ" Binding="{Binding NotarialAction.Name}"  IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Тип документа" Binding="{Binding NotarialActionsType.Name}"  IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Объект" Binding="{Binding NotarialActionsObject.Name}"  IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Дата создания" Binding="{Binding CreateDate}"  IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Дата изменения" Binding="{Binding ModifiedDate}"  IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Стоимость (грн)" Binding="{Binding Price}"  IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Паспорт клиента" Binding="{Binding Client.PassportNumber}"  IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Кем выдан" Binding="{Binding Client.PassportData}"  IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Фамилия" Binding="{Binding Client.LastName}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="Имя" Binding="{Binding Client.Name}"  IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Отчество" Binding="{Binding Client.MiddleName}"  IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Адрес" Binding="{Binding Client.Address}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Document.DocumentId}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Номер записи" Binding="{Binding Document.RecordNumber}" IsReadOnly="True" />
+                            <DataGridTextColumn Header="Документ" Binding="{Binding Document.NotarialAction.Name}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Тип документа" Binding="{Binding Document.NotarialActionsType.Name}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Объект" Binding="{Binding Document.NotarialActionsObject.Name}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Дата" Binding="{Binding Document.Date,StringFormat=dd/MM/yyyy}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Стоимость (грн)" Binding="{Binding Document.Price}"  IsReadOnly="True"/>
                         </DataGrid.Columns>
                         <DataGrid.ContextMenu>
                             <ContextMenu>

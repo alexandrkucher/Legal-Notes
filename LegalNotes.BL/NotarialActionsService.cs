@@ -50,5 +50,12 @@ namespace LegalNotes.BL
         {
             this.notarialActionsDataService.DeleteDocument(document);
         }
+
+        public void GroupDocuments(IEnumerable<int> docsIds)
+        {
+            this.notarialActionsDataService.ClearGroupingForDocuments(docsIds);
+            if (docsIds.Count() > 1)
+                this.notarialActionsDataService.GroupDocuments(docsIds);
+        }
     }
 }

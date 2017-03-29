@@ -12,10 +12,10 @@ namespace LegalNotes.UI.ViewModels
         public DocumentsList()
         {
             NotarialActions = new List<NotarialAction>();
-            Documents = new ObservableCollection<Document>();
+            DocumentsViewModels = new ObservableCollection<DocumentViewModel>();
         }
 
         public IEnumerable<NotarialAction> NotarialActions { get; set; }
-        public ObservableCollection<Document> Documents{ get; set; }
+        public ObservableCollection<DocumentViewModel> DocumentsViewModels{ get; set; }
     }
 }

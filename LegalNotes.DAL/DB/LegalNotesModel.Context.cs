@@ -25,10 +25,9 @@ namespace LegalNotes.DAL.DB
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Client> Clients { get; set; }
-        public virtual DbSet<Document> Documents { get; set; }
         public virtual DbSet<NotarialAction> NotarialActions { get; set; }
         public virtual DbSet<NotarialActionsObject> NotarialActionsObjects { get; set; }
         public virtual DbSet<NotarialActionsType> NotarialActionsTypes { get; set; }
+        public virtual DbSet<Document> Documents { get; set; }
     }
 }

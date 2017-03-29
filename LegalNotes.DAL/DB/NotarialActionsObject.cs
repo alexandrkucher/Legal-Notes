@@ -24,8 +24,8 @@ namespace LegalNotes.DAL.DB
         public int NotarialActionTypeId { get; set; }
         public string Name { get; set; }
     
+        public virtual NotarialActionsType NotarialActionsType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Document> Documents { get; set; }
-        public virtual NotarialActionsType NotarialActionsType { get; set; }
     }
 }

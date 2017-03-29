@@ -12,5 +12,6 @@ namespace LegalNotes.DTO
         public NotarialActionsType NotarialActionsType { get; set; }
         public NotarialActionsObject NotarialActionsObject { get; set; }
         public decimal Sum { get; set; }
+        public int Count { get; set; }
     }
 }

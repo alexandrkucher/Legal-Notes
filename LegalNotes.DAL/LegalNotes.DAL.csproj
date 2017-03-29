@@ -63,9 +63,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DB\Client.cs">
-      <DependentUpon>LegalNotesModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="DB\Document.cs">
       <DependentUpon>LegalNotesModel.tt</DependentUpon>
     </Compile>

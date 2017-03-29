@@ -7,11 +7,6 @@ namespace LegalNotes.DTO
 {
     public class Document
     {
-        public Document()
-        {
-            Client = new Client();
-        }
-
         public int DocumentId { get; set; }
         public int RecordNumber { get; set; }
 
@@ -19,10 +14,9 @@ namespace LegalNotes.DTO
         public virtual NotarialActionsObject NotarialActionsObject { get; set; }
         public virtual NotarialActionsType NotarialActionsType { get; set; }
 
-        public virtual Client Client { get; set; }
         public decimal Price { get; set; }
+        public DateTime Date { get; set; }
 
-        public DateTime CreateDate { get; set; }
-        public DateTime? ModifiedDate { get; set; }
+        public Guid? ClientId { get; set; }
     }
 }

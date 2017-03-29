@@ -33,7 +33,7 @@ namespace LegalNotes.DAL.Services
             {
                 var query = GetFilteredQuery(dbContext, filters);
 
-                query = query.OrderByDescending(x => x.ModifiedDate.HasValue && x.ModifiedDate > x.CreateDate ? x.ModifiedDate : x.CreateDate);
+                query = query.OrderByDescending(x => x.RecordNumber);
 
                 return query.ToList();
             }
@@ -43,15 +43,11 @@ namespace LegalNotes.DAL.Services
         {
             var query = GetDocumentsQuery(dbContext);
             if (filters.StartDate.HasValue)
-                query = query.Where(x => x.ModifiedDate.HasValue && x.ModifiedDate > x.CreateDate ?
-                                            x.ModifiedDate >= filters.StartDate :
-                                            x.CreateDate >= filters.StartDate);
+                query = query.Where(x => x.Date >= filters.StartDate);
             if (filters.EndDate.HasValue)
             {
                 var endDate = filters.EndDate.Value.AddDays(1);
-                query = query.Where(x => x.ModifiedDate.HasValue && x.ModifiedDate > x.CreateDate ?
-                                            x.ModifiedDate <= endDate :
-                                            x.CreateDate <= endDate);
+                query = query.Where(x => x.Date <= endDate);
             }
             if (filters.NotarialActionId.HasValue)
                 query = query.Where(x => x.NotarialAction.NotarialActionId == filters.NotarialActionId);
@@ -61,6 +57,35 @@ namespace LegalNotes.DAL.Services
                 query = query.Where(x => x.NotarialActionsObject.NotarialActionObjectId == filters.NotarialActionObjectId);
 
             return query;
+        }
+
+        public void GroupDocuments(IEnumerable<int> docsIds)
+        {
+            using (var dbContext = new LegalNotesEntities())
+            {
+                var newClientId = Guid.NewGuid();
+                var dbDocs = dbContext.Documents.Where(x => docsIds.Contains(x.DocumentId)).ToList();
+                foreach (var doc in dbDocs)
+                    doc.ClientId = newClientId;
+
+                dbContext.SaveChanges();
+            }
+        }
+
+        public void ClearGroupingForDocuments(IEnumerable<int> docsIds)
+        {
+            using (var dbContext = new LegalNotesEntities())
+            {
+                var dbDocsByIds = dbContext.Documents.Where(x => docsIds.Contains(x.DocumentId)).ToList();
+                var clientsIds = dbDocsByIds.Where(x => x.ClientId.HasValue).Select(x => x.ClientId).Distinct();
+                var dbDocsByClientsIds = dbContext.Documents.Where(x => clientsIds.Contains(x.ClientId)).ToList();
+                var dbDocsToProcess = dbDocsByIds.Concat(dbDocsByClientsIds).Distinct();
+
+                foreach (var doc in dbDocsToProcess)
+                    doc.ClientId = null;
+
+                dbContext.SaveChanges();
+            }
         }
 
         public IEnumerable<NotarialActionSum> GetNotarialActionsSums(Filters filters)
@@ -79,7 +104,8 @@ namespace LegalNotes.DAL.Services
                                 NotarialAction = docsGroup.Key.NotarialAction,
                                 NotarialActionsType = docsGroup.Key.NotarialActionsType,
                                 NotarialActionsObject = docsGroup.Key.NotarialActionsObject,
-                                Sum = docsGroup.Sum(x => x.Price)
+                                Sum = docsGroup.Sum(x => x.Price),
+                                Count = docsGroup.Where(x => !x.ClientId.HasValue).Count() + docsGroup.Where(x => x.ClientId.HasValue).GroupBy(x => x.ClientId).Count()
                             };
 
                 return query.ToList();
@@ -90,14 +116,7 @@ namespace LegalNotes.DAL.Services
         {
             using (var dbContext = new LegalNotesEntities())
             {
-                var newDBDoc = new DAL.DB.Document
-                {
-                    CreateDate = DateTime.UtcNow,
-                    Client = new DAL.DB.Client
-                    {
-                        CreateDate = DateTime.UtcNow,
-                    }
-                };
+                var newDBDoc = new DAL.DB.Document();
 
                 UpdateDBDocumentFromModel(newDBDoc, newDocument);
 
@@ -111,9 +130,6 @@ namespace LegalNotes.DAL.Services
             using (var dbContext = new LegalNotesEntities())
             {
                 var existingDocument = dbContext.Documents.FirstOrDefault(x => x.DocumentId == document.DocumentId);
-
-                existingDocument.ModifiedDate = DateTime.UtcNow;
-                existingDocument.Client.ModifiedDate = DateTime.UtcNow;
 
                 UpdateDBDocumentFromModel(existingDocument, document);
 
@@ -133,17 +149,12 @@ namespace LegalNotes.DAL.Services
 
         private void UpdateDBDocumentFromModel(DB.Document existingDocument, DTO.Document document)
         {
+            existingDocument.Date = document.Date;
             existingDocument.RecordNumber = document.RecordNumber;
             existingDocument.Price = document.Price;
             existingDocument.NotarialActionId = document.NotarialAction.NotarialActionId;
             existingDocument.NotarialActionTypeId = document.NotarialActionsType?.NotarialActionTypeId;
             existingDocument.NotarialActionObjectId = document.NotarialActionsObject?.NotarialActionObjectId;
-            existingDocument.Client.PassportNumber = document.Client.PassportNumber;
-            existingDocument.Client.PassportData = document.Client.PassportData;
-            existingDocument.Client.Address = document.Client.Address;
-            existingDocument.Client.Name = document.Client.Name;
-            existingDocument.Client.LastName = document.Client.LastName;
-            existingDocument.Client.MiddleName = document.Client.MiddleName;
         }
 
         private IQueryable<DTO.Document> GetDocumentsQuery(LegalNotesEntities dbContext)
@@ -153,8 +164,7 @@ namespace LegalNotes.DAL.Services
                 {
                     DocumentId = source.DocumentId,
                     RecordNumber = source.RecordNumber,
-                    CreateDate = source.CreateDate,
-                    ModifiedDate = source.ModifiedDate,
+                    Date = source.Date,
                     Price = source.Price,
                     NotarialAction = source.NotarialActionId.HasValue ? new DTO.NotarialAction
                     {
@@ -171,18 +181,7 @@ namespace LegalNotes.DAL.Services
                         NotarialActionObjectId = source.NotarialActionsObject.NotarialActionObjectId,
                         Name = source.NotarialActionsObject.Name
                     } : null,
-                    Client = new DTO.Client
-                    {
-                        ClientId = source.Client.ClientId,
-                        CreateDate = source.CreateDate,
-                        PassportNumber = source.Client.PassportNumber,
-                        PassportData = source.Client.PassportData,
-                        Address = source.Client.Address,
-                        Name = source.Client.Name,
-                        LastName = source.Client.LastName,
-                        MiddleName = source.Client.MiddleName,
-                        ModifiedDate = source.Client.ModifiedDate
-                    }
+                    ClientId = source.ClientId
                 });
         }
 

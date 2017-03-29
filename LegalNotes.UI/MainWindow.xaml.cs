@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LegalNotes.BL;
 using LegalNotes.DTO;
+using LegalNotes.UI.Helpers;
 using LegalNotes.UI.ViewModels;
 
 namespace LegalNotes.UI
@@ -57,12 +58,13 @@ namespace LegalNotes.UI
         {
             var filters = GetFilters();
 
-            viewModel.Documents.Clear();
+            viewModel.DocumentsViewModels.Clear();
 
             var docs = notarialActionsService.GetDocuments(filters);
-            foreach (var doc in docs)
-                viewModel.Documents.Add(doc);
+            var docsViewModels = DocumentsHelper.ConvertToViewModels(docs);
 
+            foreach (var doc in docsViewModels)
+                viewModel.DocumentsViewModels.Add(doc);
         }
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
@@ -72,7 +74,7 @@ namespace LegalNotes.UI
 
         private void dgrDocuments_Row_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var selectedDocument = dgrDocuments.SelectedItem as Document;
+            var selectedDocument = (dgrDocuments.SelectedItem as DocumentViewModel).Document;
             var updateDocumentPage = new CreateOrUpdateDocument(selectedDocument);
             updateDocumentPage.Owner = this;
             updateDocumentPage.ShowDialog();
@@ -82,18 +84,30 @@ namespace LegalNotes.UI
 
         private void dgrDocuments_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (dgrDocuments.SelectedItem == null || e.Key != Key.Delete)
+            if (dgrDocuments.SelectedItem == null)
                 return;
-
-            var selectedDocument = dgrDocuments.SelectedItem as Document;
-
-            var dialogResult = MessageBox.Show(String.Format("Вы действительлно хотите удалить запись под номером {0}?", selectedDocument.RecordNumber), "Внимание", MessageBoxButton.OKCancel);
-            if (dialogResult == MessageBoxResult.OK)
+            if (e.Key == Key.Delete)
             {
-                notarialActionsService.Delete(selectedDocument);
+                var selectedDocument = (dgrDocuments.SelectedItem as DocumentViewModel).Document;
+
+                var dialogResult = MessageBox.Show(String.Format("Вы действительлно хотите удалить запись под номером {0}?", selectedDocument.RecordNumber), "Внимание", MessageBoxButton.OKCancel);
+                if (dialogResult == MessageBoxResult.OK)
+                {
+                    notarialActionsService.Delete(selectedDocument);
+                }
             }
-            else
-                e.Handled = true;
+            else if (e.Key == Key.Space)
+            {
+                if (dgrDocuments.SelectedItems.Count > 0)
+                {
+                    var docsIds = dgrDocuments.SelectedItems.Cast<DocumentViewModel>().Select(x => x.Document.DocumentId);
+                    notarialActionsService.GroupDocuments(docsIds);
+                    
+                }
+            }
+
+            e.Handled = true;
+            LoadDocuments();
         }
 
         private void cmbNotarialActions_SelectionChanged(object sender, SelectionChangedEventArgs e)

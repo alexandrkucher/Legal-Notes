@@ -18,13 +18,11 @@ namespace LegalNotes.DAL.DB
         public Nullable<int> NotarialActionId { get; set; }
         public Nullable<int> NotarialActionTypeId { get; set; }
         public Nullable<int> NotarialActionObjectId { get; set; }
-        public int ClientId { get; set; }
+        public Nullable<System.Guid> ClientId { get; set; }
         public decimal Price { get; set; }
-        public System.DateTime CreateDate { get; set; }
-        public Nullable<System.DateTime> ModifiedDate { get; set; }
+        public System.DateTime Date { get; set; }
         public int RecordNumber { get; set; }
     
-        public virtual Client Client { get; set; }
         public virtual NotarialAction NotarialAction { get; set; }
         public virtual NotarialActionsObject NotarialActionsObject { get; set; }
         public virtual NotarialActionsType NotarialActionsType { get; set; }

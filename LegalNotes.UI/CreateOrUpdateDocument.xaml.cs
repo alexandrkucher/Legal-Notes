@@ -37,7 +37,7 @@ namespace LegalNotes.UI
                 isNewDocument = false;
 
             viewModel.Document = document;
-            
+
             InitializeComponent();
 
             InitControls();
@@ -49,10 +49,13 @@ namespace LegalNotes.UI
             {
                 viewModel.Document.RecordNumber = notarialActionsService.GetNewDocumentId();
                 this.Title = "Добавить документ";
+                txtDocumentsCount.Visibility = Visibility.Visible;
+                viewModel.Document.Date = DateTime.UtcNow.Date;
             }
             else
             {
                 this.Title = "Изменить документ";
+                txtDocumentsCount.Visibility = Visibility.Collapsed;
             }
 
             viewModel.NotarialActions = notarialActionsService.GetNotarialActions();
@@ -110,24 +113,23 @@ namespace LegalNotes.UI
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
-            viewModel.Document.RecordNumber = int.Parse(txtRecordNumber.Text);
-            viewModel.Document.CreateDate = DateTime.UtcNow;
-            viewModel.Document.Price = decimal.Parse(txtSum.Text);
-            viewModel.Document.NotarialAction = cmbNotarialActions.SelectedItem as NotarialAction;
-            viewModel.Document.NotarialActionsType = cmbNotarialTypes.SelectedItem as NotarialActionsType;
-            viewModel.Document.NotarialActionsObject = cmbNotarialObjects.SelectedItem as NotarialActionsObject;
-            viewModel.Document.Client.CreateDate = DateTime.UtcNow;
-            viewModel.Document.Client.PassportNumber = txtPassportNumber.Text.Trim().ToUpper();
-            viewModel.Document.Client.PassportData = txtPassportData.Text;
-            viewModel.Document.Client.Address = txtAddress.Text;
-            viewModel.Document.Client.Name = txtFirstName.Text.Trim();
-            viewModel.Document.Client.LastName = txtLastName.Text.Trim();
-            viewModel.Document.Client.MiddleName = txtMiddleName.Text.Trim();
+            var recordNumber = int.Parse(txtRecordNumber.Text);
+            var docsCount = int.Parse(txtDocumentsCount.Text);
 
-            if (isNewDocument)
-                notarialActionsService.CreateDocument(viewModel.Document);
-            else
-                notarialActionsService.UpdateDocument(viewModel.Document);
+            for (int i = recordNumber; i < recordNumber + docsCount; i++)
+            {
+                viewModel.Document.RecordNumber = i;
+                viewModel.Document.Date = dtpDate.SelectedDate.Value;
+                viewModel.Document.Price = decimal.Parse(txtSum.Text);
+                viewModel.Document.NotarialAction = cmbNotarialActions.SelectedItem as NotarialAction;
+                viewModel.Document.NotarialActionsType = cmbNotarialTypes.SelectedItem as NotarialActionsType;
+                viewModel.Document.NotarialActionsObject = cmbNotarialObjects.SelectedItem as NotarialActionsObject;
+
+                if (isNewDocument)
+                    notarialActionsService.CreateDocument(viewModel.Document);
+                else
+                    notarialActionsService.UpdateDocument(viewModel.Document);
+            }
 
             this.Close();
         }
