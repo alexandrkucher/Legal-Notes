@@ -17,7 +17,7 @@
                     <Label Content="Номер записи" Target="{Binding ElementName=txtId}" />
                     <TextBox x:Name="txtRecordNumber" Text="{Binding Document.RecordNumber}"/>
                     <Label Content="Количество документов" Target="{Binding ElementName=chbDocumentsCount}" Visibility="{Binding ElementName=txtDocumentsCount, Path=Visibility}" />
-                    <xctk:IntegerUpDown x:Name="txtDocumentsCount" Value="1" TextAlignment="Left"/>
+                    <xctk:IntegerUpDown x:Name="txtDocumentsCount" Value="1" Minimum="1" TextAlignment="Left"/>
                     <Label Content="Документ" Target="{Binding ElementName=cmbNotarialActions}" />
                     <ComboBox 
                             x:Name="cmbNotarialActions"
