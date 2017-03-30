@@ -36,7 +36,7 @@ namespace LegalNotes.BL
             return this.notarialActionsDataService.GetDocuments(filters);
         }
 
-        public IEnumerable<NotarialActionSum> GetReport(Filters filters)
+        public IEnumerable<NotarialActionStat> GetNotarialActionsStats(Filters filters)
         {
             return this.notarialActionsDataService.GetNotarialActionsSums(filters);
         }

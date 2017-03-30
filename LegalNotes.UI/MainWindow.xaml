@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LegalNotes.UI"
         mc:Ignorable="d"
-        Title="Legal Notes">
+        Title="Legal Notes"
+        FontSize="14">
     <Grid>
         <TabControl>
             <TabItem Header="Документы">
@@ -23,7 +24,6 @@
                         <DatePicker x:Name="dtpFrom" />
                         <Label Content="По:" Target="{Binding ElementName=dtpTo}" />
                         <DatePicker x:Name="dtpTo" />
-
                         <Label Content="Документ:" Target="{Binding ElementName=cmbNotarialActions}"/>
                         <ComboBox  
                             x:Name="cmbNotarialActions"               
@@ -86,7 +86,6 @@
                           CanUserSortColumns="False"
                           CanUserAddRows="False"
                           PreviewKeyDown="dgrDocuments_PreviewKeyDown">
-
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
                                 <Setter Property="Background" Value="{Binding Brush}"/>
@@ -99,8 +98,8 @@
                             <DataGridTextColumn Header="Документ" Binding="{Binding Document.NotarialAction.Name}"  IsReadOnly="True"/>
                             <DataGridTextColumn Header="Тип документа" Binding="{Binding Document.NotarialActionsType.Name}"  IsReadOnly="True"/>
                             <DataGridTextColumn Header="Объект" Binding="{Binding Document.NotarialActionsObject.Name}"  IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Дата" Binding="{Binding Document.Date,StringFormat=dd/MM/yyyy}"  IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Стоимость (грн)" Binding="{Binding Document.Price}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Дата" Binding="{Binding Document.Date,StringFormat=dd.MM.yyyy}"  IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Стоимость (грн)" Binding="{Binding Document.Price}"  IsReadOnly="True" FontWeight="Bold"/>
                         </DataGrid.Columns>
                         <DataGrid.ContextMenu>
                             <ContextMenu>

@@ -5,12 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LegalNotes.UI"
         mc:Ignorable="d"
-        Title="Отчет">
+        Title="Отчет"
+        FontSize="14">
     <Grid>
-        <DataGrid x:Name="dgrDocuments" 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10,10,0,0" DataContext="{Binding Filters}">
+            <TextBlock Text="Отчет с " />
+            <TextBlock Text="{Binding StartDate, StringFormat=dd.MM.yyyy}" FontWeight="Bold" />
+            <TextBlock Text=" по " />
+            <TextBlock Text="{Binding EndDate, StringFormat=dd.MM.yyyy}" FontWeight="Bold" />
+        </StackPanel>
+        <DataGrid x:Name="dgrDocuments"  Grid.Row="1" Margin="0,5,0,0"
                           HorizontalAlignment="Stretch" 
                           VerticalAlignment="Top" 
-                          ItemsSource="{Binding}"
+                          ItemsSource="{Binding NotarialActionsStats}"
                           AutoGenerateColumns="False" 
                           CanUserSortColumns="False"
                           CanUserAddRows="False"
@@ -26,10 +37,10 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Количество клиентов" ClipboardContentBinding="{Binding Count}">
+                <DataGridTemplateColumn Header="Количество клиентов" ClipboardContentBinding="{Binding ClientsCount}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Count}" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding ClientsCount}" FontWeight="Bold" TextAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

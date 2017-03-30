@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:LegalNotes.UI"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+      
     </Application.Resources>
 </Application>

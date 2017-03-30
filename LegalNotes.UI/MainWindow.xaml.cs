@@ -1,18 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using LegalNotes.BL;
 using LegalNotes.DTO;
 using LegalNotes.UI.Helpers;
@@ -86,15 +76,20 @@ namespace LegalNotes.UI
         {
             if (dgrDocuments.SelectedItem == null)
                 return;
+
+            if (e.Key != Key.Delete && e.Key != Key.Space)
+                return;
+
             if (e.Key == Key.Delete)
             {
-                var selectedDocument = (dgrDocuments.SelectedItem as DocumentViewModel).Document;
-
-                var dialogResult = MessageBox.Show(String.Format("Вы действительлно хотите удалить запись под номером {0}?", selectedDocument.RecordNumber), "Внимание", MessageBoxButton.OKCancel);
+                var selectedDocuments = dgrDocuments.SelectedItems.Cast<DocumentViewModel>();
+                var dialogResult = MessageBox.Show(String.Format("Вы действительлно хотите удалить запись(-и) под номером(-ами) {0}?", String.Join(", ", selectedDocuments.Select(x => x.Document.RecordNumber))), "Внимание", MessageBoxButton.OKCancel);
                 if (dialogResult == MessageBoxResult.OK)
                 {
-                    notarialActionsService.Delete(selectedDocument);
+                    selectedDocuments.ToList().ForEach(x => notarialActionsService.Delete(x.Document));
                 }
+                else
+                    e.Handled = true;
             }
             else if (e.Key == Key.Space)
             {
@@ -102,12 +97,11 @@ namespace LegalNotes.UI
                 {
                     var docsIds = dgrDocuments.SelectedItems.Cast<DocumentViewModel>().Select(x => x.Document.DocumentId);
                     notarialActionsService.GroupDocuments(docsIds);
-                    
+
+                    e.Handled = true;
+                    LoadDocuments();
                 }
             }
-
-            e.Handled = true;
-            LoadDocuments();
         }
 
         private void cmbNotarialActions_SelectionChanged(object sender, SelectionChangedEventArgs e)

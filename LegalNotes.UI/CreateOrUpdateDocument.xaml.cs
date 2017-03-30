@@ -113,25 +113,32 @@ namespace LegalNotes.UI
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
-            var recordNumber = int.Parse(txtRecordNumber.Text);
-            var docsCount = int.Parse(txtDocumentsCount.Text);
-
-            for (int i = recordNumber; i < recordNumber + docsCount; i++)
+            try
             {
-                viewModel.Document.RecordNumber = i;
-                viewModel.Document.Date = dtpDate.SelectedDate.Value;
-                viewModel.Document.Price = decimal.Parse(txtSum.Text);
-                viewModel.Document.NotarialAction = cmbNotarialActions.SelectedItem as NotarialAction;
-                viewModel.Document.NotarialActionsType = cmbNotarialTypes.SelectedItem as NotarialActionsType;
-                viewModel.Document.NotarialActionsObject = cmbNotarialObjects.SelectedItem as NotarialActionsObject;
+                var recordNumber = int.Parse(txtRecordNumber.Text);
+                var docsCount = int.Parse(txtDocumentsCount.Text);
 
-                if (isNewDocument)
-                    notarialActionsService.CreateDocument(viewModel.Document);
-                else
-                    notarialActionsService.UpdateDocument(viewModel.Document);
+                for (int i = recordNumber; i < recordNumber + docsCount; i++)
+                {
+                    viewModel.Document.RecordNumber = i;
+                    viewModel.Document.Date = dtpDate.SelectedDate.Value;
+                    viewModel.Document.Price = decimal.Parse(txtSum.Text);
+                    viewModel.Document.NotarialAction = cmbNotarialActions.SelectedItem as NotarialAction;
+                    viewModel.Document.NotarialActionsType = cmbNotarialTypes.SelectedItem as NotarialActionsType;
+                    viewModel.Document.NotarialActionsObject = cmbNotarialObjects.SelectedItem as NotarialActionsObject;
+
+                    if (isNewDocument)
+                        notarialActionsService.CreateDocument(viewModel.Document);
+                    else
+                        notarialActionsService.UpdateDocument(viewModel.Document);
+                }
+
+                this.Close();
             }
-
-            this.Close();
-        }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Неправильный формат данных");
+            }
+        }        
     }
 }

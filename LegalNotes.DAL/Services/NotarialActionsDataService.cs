@@ -88,7 +88,7 @@ namespace LegalNotes.DAL.Services
             }
         }
 
-        public IEnumerable<NotarialActionSum> GetNotarialActionsSums(Filters filters)
+        public IEnumerable<NotarialActionStat> GetNotarialActionsSums(Filters filters)
         {
             using (var dbContext = new LegalNotesEntities())
             {
@@ -99,13 +99,13 @@ namespace LegalNotes.DAL.Services
                                 d.NotarialActionsType,
                                 d.NotarialActionsObject
                             } into docsGroup
-                            select new NotarialActionSum
+                            select new NotarialActionStat
                             {
                                 NotarialAction = docsGroup.Key.NotarialAction,
                                 NotarialActionsType = docsGroup.Key.NotarialActionsType,
                                 NotarialActionsObject = docsGroup.Key.NotarialActionsObject,
                                 Sum = docsGroup.Sum(x => x.Price),
-                                Count = docsGroup.Where(x => !x.ClientId.HasValue).Count() + docsGroup.Where(x => x.ClientId.HasValue).GroupBy(x => x.ClientId).Count()
+                                ClientsCount = docsGroup.Where(x => !x.ClientId.HasValue).Count() + docsGroup.Where(x => x.ClientId.HasValue).GroupBy(x => x.ClientId).Count()
                             };
 
                 return query.ToList();

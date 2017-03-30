@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using LegalNotes.BL;
 using LegalNotes.DTO;
+using LegalNotes.UI.ViewModels;
 
 namespace LegalNotes.UI
 {
@@ -35,8 +36,8 @@ namespace LegalNotes.UI
 
         private void LoadData(Filters filters)
         {
-            var result = notarialActionsService.GetReport(filters);
-            dgrDocuments.DataContext = result;
+            var notarialActionsStats = notarialActionsService.GetNotarialActionsStats(filters);
+            this.DataContext = new ReportViewModel { Filters = filters, NotarialActionsStats = notarialActionsStats };
         }
     }
 }

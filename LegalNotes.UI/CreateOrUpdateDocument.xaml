@@ -4,30 +4,30 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LegalNotes.UI"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="Добавить">
-
+        Title="Добавить"
+        FontSize="14">
     <Grid>
         <ScrollViewer>
-            <StackPanel Margin="5">
-                <GroupBox Header="Документ">
-                    <StackPanel Margin="10">
-                        <Label Content="Дата" Target="{Binding ElementName=dtpDate}" />
-                        <DatePicker x:Name="dtpDate" SelectedDate="{Binding Document.Date}" />
-                        <Label Content="Номер записи" Target="{Binding ElementName=txtId}" />
-                        <TextBox x:Name="txtRecordNumber" Text="{Binding Document.RecordNumber}"/>
-                        <Label Content="Количество документов" Target="{Binding ElementName=chbDocumentsCount}" Visibility="{Binding ElementName=txtDocumentsCount, Path=Visibility}" />
-                        <TextBox x:Name="txtDocumentsCount" Text="1" />
-                        <Label Content="Документ" Target="{Binding ElementName=cmbNotarialActions}" />
-                        <ComboBox 
+            <StackPanel>
+                <StackPanel Margin="10">
+                    <Label Content="Дата" Target="{Binding ElementName=dtpDate}" />
+                    <DatePicker x:Name="dtpDate" SelectedDate="{Binding Document.Date}" />
+                    <Label Content="Номер записи" Target="{Binding ElementName=txtId}" />
+                    <TextBox x:Name="txtRecordNumber" Text="{Binding Document.RecordNumber}"/>
+                    <Label Content="Количество документов" Target="{Binding ElementName=chbDocumentsCount}" Visibility="{Binding ElementName=txtDocumentsCount, Path=Visibility}" />
+                    <xctk:IntegerUpDown x:Name="txtDocumentsCount" Value="1" TextAlignment="Left"/>
+                    <Label Content="Документ" Target="{Binding ElementName=cmbNotarialActions}" />
+                    <ComboBox 
                             x:Name="cmbNotarialActions"
                             ItemsSource="{Binding NotarialActions}"
                             SelectedIndex="0"
                             IsEditable="True" 
                             DisplayMemberPath="Name"
                             SelectionChanged="cmbNotarialActions_SelectionChanged"/>
-                        <Label Content="Тип" Target="{Binding ElementName=cmbNotarialTypes}" Visibility="{Binding ElementName=cmbNotarialTypes, Path=Visibility}"/>
-                        <ComboBox 
+                    <Label Content="Тип" Target="{Binding ElementName=cmbNotarialTypes}" Visibility="{Binding ElementName=cmbNotarialTypes, Path=Visibility}"/>
+                    <ComboBox 
                             x:Name="cmbNotarialTypes"
                             ItemsSource="{Binding}"
                             SelectedIndex="0"
@@ -35,18 +35,17 @@
                             IsEditable="True" 
                             DisplayMemberPath="Name"
                             SelectionChanged="cmbNotarialTypes_SelectionChanged"/>
-                        <Label Content="Объект" Target="{Binding ElementName=cmbNotarialObjects}" Visibility="{Binding ElementName=cmbNotarialObjects, Path=Visibility}"/>
-                        <ComboBox 
+                    <Label Content="Объект" Target="{Binding ElementName=cmbNotarialObjects}" Visibility="{Binding ElementName=cmbNotarialObjects, Path=Visibility}"/>
+                    <ComboBox 
                             x:Name="cmbNotarialObjects"
                             ItemsSource="{Binding}"
                             SelectedIndex="0"
                             IsSynchronizedWithCurrentItem="True"
                             IsEditable="True"
                             DisplayMemberPath="Name"/>
-                        <Label Content="Сумма (грн)" Target="{Binding ElementName=cmbNotarialObjects}" />
-                        <TextBox Name="txtSum" Text="{Binding Document.Price}"/>
-                    </StackPanel >
-                </GroupBox>               
+                    <Label Content="Сумма (грн)" Target="{Binding ElementName=cmbNotarialObjects}" />
+                    <TextBox Name="txtSum" Text="{Binding Document.Price, StringFormat=N1, ValidatesOnExceptions=true,  ValidatesOnDataErrors=true, NotifyOnValidationError=True}" FontWeight="Bold"/>
+                </StackPanel >
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
                     <Button x:Name="btnOK" Content="OK" IsDefault="True" Width="70" Margin="0,0,5,0" Click="btnOK_Click"/>
                     <Button x:Name="btnCancel" Content="Отменить" Width="70" Click="btnCancel_Click"/>
