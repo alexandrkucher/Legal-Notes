@@ -64,6 +64,9 @@ namespace LegalNotes.UI
 
         private void dgrDocuments_Row_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            if (dgrDocuments.SelectedItem == null)
+                return;
+
             var selectedDocument = (dgrDocuments.SelectedItem as DocumentViewModel).Document;
             var updateDocumentPage = new CreateOrUpdateDocument(selectedDocument);
             updateDocumentPage.Owner = this;

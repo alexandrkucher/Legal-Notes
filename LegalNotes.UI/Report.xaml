@@ -12,11 +12,11 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10,10,0,0" DataContext="{Binding Filters}">
-            <TextBlock Text="Отчет с " />
-            <TextBlock Text="{Binding StartDate, StringFormat=dd.MM.yyyy}" FontWeight="Bold" />
-            <TextBlock Text=" по " />
-            <TextBlock Text="{Binding EndDate, StringFormat=dd.MM.yyyy}" FontWeight="Bold" />
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10" DataContext="{Binding Filters}">
+            <TextBlock Text="Отчет с " FontSize="18" />
+            <TextBlock Text="{Binding StartDate, StringFormat=dd.MM.yyyy}" FontWeight="Bold" FontSize="18"/>
+            <TextBlock Text=" по " FontSize="18"/>
+            <TextBlock Text="{Binding EndDate, StringFormat=dd.MM.yyyy}" FontWeight="Bold" FontSize="18"/>
         </StackPanel>
         <DataGrid x:Name="dgrDocuments"  Grid.Row="1" Margin="0,5,0,0"
                           HorizontalAlignment="Stretch" 
@@ -25,7 +25,11 @@
                           AutoGenerateColumns="False" 
                           CanUserSortColumns="False"
                           CanUserAddRows="False"
-                          SelectionUnit="Cell">
+                          SelectionUnit="Cell"
+                          GridLinesVisibility="Horizontal"
+                          BorderBrush="LightGray"
+                          HorizontalGridLinesBrush="LightGray"
+                          VerticalGridLinesBrush="LightGray">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Документ" Binding="{Binding NotarialAction.Name}"  IsReadOnly="True"/>
                 <DataGridTextColumn Header="Тип документа" Binding="{Binding NotarialActionsType.Name}"  IsReadOnly="True"/>

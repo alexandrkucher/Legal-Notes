@@ -75,7 +75,7 @@
                                 </CompositeCollection>
                             </ComboBox.ItemsSource>
                         </ComboBox>
-                        <Button x:Name="btnLoad" Content="Загрузить" Click="btnLoad_Click" Margin="5,0,0,0"/>
+                        <Button x:Name="btnLoad" Content="Загрузить" Click="btnLoad_Click" Margin="5,0,0,0" Padding="5"/>
                     </StackPanel>
                     <DataGrid x:Name="dgrDocuments" 
                           Grid.Row="1"
@@ -85,21 +85,35 @@
                           AutoGenerateColumns="False" 
                           CanUserSortColumns="False"
                           CanUserAddRows="False"
-                          PreviewKeyDown="dgrDocuments_PreviewKeyDown">
+                          BorderBrush="LightGray"
+                          HorizontalGridLinesBrush="LightGray"
+                          VerticalGridLinesBrush="LightGray"
+                          PreviewKeyDown="dgrDocuments_PreviewKeyDown">                       
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
-                                <Setter Property="Background" Value="{Binding Brush}"/>
+                                <Setter Property="Background" Value="{Binding Brush, TargetNullValue=White}"/>                               
                                 <EventSetter Event="MouseDoubleClick" Handler="dgrDocuments_Row_MouseDoubleClick"/>
                             </Style>
                         </DataGrid.RowStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Id" Binding="{Binding Document.DocumentId}" IsReadOnly="True" />
-                            <DataGridTextColumn Header="Номер записи" Binding="{Binding Document.RecordNumber}" IsReadOnly="True" />
+                            <DataGridTemplateColumn Header="Номер записи" ClipboardContentBinding="{Binding Document.RecordNumber}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Document.RecordNumber}" Foreground="#415785" FontWeight="Bold" TextAlignment="Center" FontSize="16"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTextColumn Header="Документ" Binding="{Binding Document.NotarialAction.Name}"  IsReadOnly="True"/>
                             <DataGridTextColumn Header="Тип документа" Binding="{Binding Document.NotarialActionsType.Name}"  IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Объект" Binding="{Binding Document.NotarialActionsObject.Name}"  IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Дата" Binding="{Binding Document.Date,StringFormat=dd.MM.yyyy}"  IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Стоимость (грн)" Binding="{Binding Document.Price}"  IsReadOnly="True" FontWeight="Bold"/>
+                            <DataGridTextColumn Header="Объект" Binding="{Binding Document.NotarialActionsObject.Name}"  IsReadOnly="True" />
+                            <DataGridTextColumn Header="Дата" Binding="{Binding Document.Date,StringFormat=dd.MM.yyyy}"  IsReadOnly="True" />
+                            <DataGridTemplateColumn Header="Стоимость (грн)" ClipboardContentBinding="{Binding Document.Price}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Document.Price}" FontWeight="Bold" TextAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                         <DataGrid.ContextMenu>
                             <ContextMenu>
@@ -108,7 +122,7 @@
                         </DataGrid.ContextMenu>
                     </DataGrid>
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button x:Name="btnReport" Content="Отчет" Width="150" Height="50" FontSize="22" Margin="0,0,15,15" Click="btnReport_Click" />
+                        <Button x:Name="btnReport" Content="Отчет" Width="150" Height="50" FontSize="22" Margin="0,15,15,15" Click="btnReport_Click" />
                     </StackPanel>
                 </Grid>
             </TabItem>
